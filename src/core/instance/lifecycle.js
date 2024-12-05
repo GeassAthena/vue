@@ -29,6 +29,7 @@ export function setActiveInstance(vm: Component) {
   }
 }
 
+// 初始化生命周期，parent、children、$refs以及生命周期状态
 export function initLifecycle (vm: Component) {
   const options = vm.$options
 

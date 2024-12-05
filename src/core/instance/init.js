@@ -19,6 +19,7 @@ export function initMixin (Vue: Class<Component>) {
     vm._uid = uid++
 
     let startTag, endTag
+    // istanbul是代码覆盖率检测工具 ignore代表的是忽略某些环境判断的代码测试
     /* istanbul ignore if */
     if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
       startTag = `vue-perf-start:${vm._uid}`
@@ -26,6 +27,7 @@ export function initMixin (Vue: Class<Component>) {
       mark(startTag)
     }
 
+    // 避免vue实例被侦听
     // a flag to avoid this being observed
     vm._isVue = true
     // merge options
@@ -49,7 +51,9 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
+    // 初始化生命周期，parent、children、$refs以及生命周期状态
     initLifecycle(vm)
+    // 初始化生命周期，parent、children、$refs以及生命周期状态
     initEvents(vm)
     initRender(vm)
     callHook(vm, 'beforeCreate')
