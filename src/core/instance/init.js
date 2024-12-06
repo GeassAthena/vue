@@ -55,8 +55,11 @@ export function initMixin (Vue: Class<Component>) {
     initLifecycle(vm)
     // 初始化生命周期，parent、children、$refs以及生命周期状态
     initEvents(vm)
+    // 处理插槽和$attrs、$listeners
     initRender(vm)
+    // 调用beforeCreate生命周期钩子
     callHook(vm, 'beforeCreate')
+    // 初始化 injections 在data、props前
     initInjections(vm) // resolve injections before data/props
     initState(vm)
     initProvide(vm) // resolve provide after data/props
