@@ -144,10 +144,12 @@ function initData (vm: Component) {
         vm
       )
     } else if (!isReserved(key)) {
+      // 将data字段属性代理到vm外层可以直接通过vm.key访问
       proxy(vm, `_data`, key)
     }
   }
   // observe data
+  // 核心代码 创建响应式
   observe(data, true /* asRootData */)
 }
 

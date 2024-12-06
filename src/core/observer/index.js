@@ -137,8 +137,10 @@ export function defineReactive (
   key: string,
   val: any,
   customSetter?: ?Function,
+  // shallow 是否浅层侦听
   shallow?: boolean
 ) {
+  // 创建依赖收集器
   const dep = new Dep()
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
@@ -146,6 +148,7 @@ export function defineReactive (
     return
   }
 
+  // 处理属性原有的getter，setter
   // cater for pre-defined getter/setters
   const getter = property && property.get
   const setter = property && property.set
@@ -159,6 +162,7 @@ export function defineReactive (
     configurable: true,
     get: function reactiveGetter () {
       const value = getter ? getter.call(obj) : val
+      // 调用get时收集依赖
       if (Dep.target) {
         dep.depend()
         if (childOb) {
@@ -188,6 +192,7 @@ export function defineReactive (
         val = newVal
       }
       childOb = !shallow && observe(newVal)
+      // 调用set更新val后通知watcher更新
       dep.notify()
     }
   })

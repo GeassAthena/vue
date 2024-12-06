@@ -50,6 +50,7 @@ export function resolveInject (inject: any, vm: Component): ?Object {
       if (key === '__ob__') continue
       const provideKey = inject[key].from
       let source = vm
+      // 从vm自身向上递归查找有provide的vm实例，找到第一个存在provideKey的即返回值
       while (source) {
         if (source._provided && hasOwn(source._provided, provideKey)) {
           result[key] = source._provided[provideKey]
@@ -57,6 +58,7 @@ export function resolveInject (inject: any, vm: Component): ?Object {
         }
         source = source.$parent
       }
+      // 未查找到值且存在default值的赋值为default
       if (!source) {
         if ('default' in inject[key]) {
           const provideDefault = inject[key].default
