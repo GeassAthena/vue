@@ -39,6 +39,7 @@ let timerFunc
 // completely stops working after triggering a few times... so, if native
 // Promise is available, we will use it:
 /* istanbul ignore next, $flow-disable-line */
+// 逐层降级实现nextTick，Promise.then、MutationObserver、setImmediate、setTimeout，从微任务到宏任务
 if (typeof Promise !== 'undefined' && isNative(Promise)) {
   const p = Promise.resolve()
   timerFunc = () => {
@@ -74,11 +75,13 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
   // Fallback to setImmediate.
   // Techinically it leverages the (macro) task queue,
   // but it is still a better choice than setTimeout.
+  // setImmediate会将回调加入到当前任务队列完成后尽快执行
   timerFunc = () => {
     setImmediate(flushCallbacks)
   }
 } else {
   // Fallback to setTimeout.
+  // settimeout即使设置为0，回调也是加入到下一轮任务队列执行
   timerFunc = () => {
     setTimeout(flushCallbacks, 0)
   }

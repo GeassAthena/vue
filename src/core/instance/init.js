@@ -57,13 +57,15 @@ export function initMixin (Vue: Class<Component>) {
     initEvents(vm)
     // 处理插槽和$attrs、$listeners
     initRender(vm)
-    // 调用beforeCreate生命周期钩子
+    // 调用beforeCreate生命周期钩子，此时不可访问data，props、computed、watch、provide、inject
     callHook(vm, 'beforeCreate')
     // 初始化 injections 在data、props前
     initInjections(vm) // resolve injections before data/props
     // 解析props/data
     initState(vm)
+    // 处理provide
     initProvide(vm) // resolve provide after data/props
+    // 触发钩子函数created，因此理论上来说created时已经可以访问data，props、computed、watch、provide、inject
     callHook(vm, 'created')
 
     /* istanbul ignore if */
@@ -73,6 +75,7 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
+    // 初始化完成再挂在dom节点，因此在created阶段无法修改el
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }
